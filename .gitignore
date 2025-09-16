@@ -1,0 +1,19 @@
+# ignorar a pasta de dados fashionMnist
+# Arquivos de Cache e Bytecode do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Pasta de dados
+data/
+
+# Ambientes virtuais
+.venv/
+venv/
+ENV/
+env/
+
+# Arquivos de IDE e editores
+.vscode/
+.idea/
