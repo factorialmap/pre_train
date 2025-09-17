@@ -84,3 +84,36 @@ for epoch in range(5):
         optimizer_ae.step()
         total_loss += loss.item()
     print(f"Pre-treinamento - Época {epoch+1}, Loss: {total_loss:.4f}")
+
+
+
+# stp7: Modelo classificador usando o encoder do autoencoder
+class Classifier(nn.Module):
+    def __init__(self, encoder):
+        super(Classifier, self).__init__()
+        self.encoder = encoder
+        self.classifier = nn.Linear(64,10)
+    
+    def forward(self, x):
+        x =self.encoder(x)
+        x = self.classifier(x)
+        return x
+
+classifier = Classifier(autoencoder.encoder).to(device)
+criterion_clf = nn.CrossEntropyLoss()
+optimizer_clf = optim.Adam(classifier.parameters(), lr = 1e-3)
+
+# step8: Treinamento do classificador
+for epoch in range(5):
+    classifier.trian()
+    total_loss = 0
+    for data, target in loader_train:
+        data, target = data.to(device), target.to(device)
+        optimizer_clf.zero_grad()
+        output = classifier(data)
+        loss = criterion_clf(output, target)
+        loss.backward()
+        optimizer_clf.step()
+        total_loss += loss.item()
+    print(f"Fine-tuning - Época {epoch+1}, Loss: {total_loss:.4f}")
+
