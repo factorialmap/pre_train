@@ -117,3 +117,18 @@ for epoch in range(5):
         total_loss += loss.item()
     print(f"Fine-tuning - Época {epoch+1}, Loss: {total_loss:.4f}")
 
+
+# step9: avaliacao do modelo usando conjunto de teste
+classifier.eval()
+correct = 0
+total = 0
+with torch.no_grad():
+    for data, target in loader_test:
+        data, target = data.to(device), target.to(device)
+        output = classifier(data)
+        pred = output.argmax(dim=1)
+        correct += (pred == target).sum().item()
+        total += target.size(0)
+
+accuracy = 100. * correct / total
+print(f"Acuracia final no teste: {accuracy:.2f}")
