@@ -7,7 +7,6 @@ format: html
 Loading packages or libraries.
 
 ```{python}
-
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import StandardScaler
@@ -67,6 +66,9 @@ x_train, y_train = x[train_idx], y[train_idx]
 x_validation, y_validation = x[validation_idx], y[validation_idx]
 ```
 
+Visualize the data for training and validation
+
+
 ```{python}
 plt.clf
 fig, axs = plt.subplots(1,2, figsize =(10,5))
@@ -77,10 +79,38 @@ axs[0].set_xlabel("x")
 axs[0].set_ylabel("y")
 axs[0].legend()
 
-
 axs[1].scatter(x_validation, y_validation, color ='red', label=  "Validation data")
 axs[1].set_title("Validation data")
 axs[1].set_xlabel("x")
 axs[1].set_ylabel("y")
 axs[1].legend()
+```
+
+For training the model, we need to randomly initialize the parameters/weights.
+
+```{python}
+np.random.seed(42)
+b = np.random.randn(1)
+w = np.random.randn(1)
+
+print(b,w)
+
+```
+
+Basic parameter values and predictions
+
+```{python}
+yhat = b + w * x_train
+```
+
+Visualize the predictions
+
+```{python}
+plt.clf()
+plt.style.use('fivethirtyeight')
+plt.scatter(x_train, y_train, label = "Training data")
+plt.plot(x_train, yhat, color = "red", linestyle = "dashed", label = f'Initial Model:  y = {b[0]:.2f} + {w[0]:.2f}x')
+plt.xlabel("x")
+plt.ylabel("y")
+plt.legend()
 ```
