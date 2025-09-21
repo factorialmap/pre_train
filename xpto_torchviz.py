@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 import matplotlib.pyplot as plt
-from torch.utils.tensorboard import SummaryWriter
+
 
 class Mynn(nn.Module):
     def __init__(self):
