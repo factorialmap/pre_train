@@ -49,7 +49,45 @@ The same model in a less abstract way:
 > `Final Exam Score = Baseline Score + (Points per Study Hour * Hours Studied) + Individual Variations`
 
 **Engineering:**
-> `Concrete Strength = Baseline Strength + (Strength Increase per Unit of Additive * Amount of Additive) + Environmental Factors`
+> `Concrete Strength = Baseline Strength + (Strength Increase per Unit of Additive * Amount of Additive) + Environmental Factors`.
+
+
+::: {.callout-tip collapse="true"}
+## Click here for more details of that model
+
+**1. Retail**
+Let's imagine we want to predict the total sales for a day based on the number of customers that walk into a store.
+
+- **Formula**: Total Sales = Baseline Sales + (Average Spend per Customer * Number of Customers) + Other Influences
+- **y (Outcome)**: Total Sales for the day.
+- **b(Intercept)**: Baseline Sales represents the expected sales from online orders or other sources, even if zero customers walk in.
+- **w (Slope)**: Average Spend per Customer is the average amount each customer spends.
+- **x (Predictor)**: Number of Customers who visited the store.
+- **e (Noise)**: Other Influences could be things like a local event, bad weather, or a competitor's sale.
+
+**2. Education**
+Here, we'll try to predict a student's final exam score based on the hours they spent studying.
+
+- **Formula**: Final Exam Score = Baseline Score + (Points per Study Hour * Hours Studied) + Individual Variations
+- **y (Outcome)**: The Final Exam Score.
+- **b (Intercept)**: Baseline Score is the score a student might get with zero hours of studying, based on their prior knowledge.
+- **w (Slope)**: Points per Study Hour is the average increase in the exam score for each additional hour of study.
+- **x (Predictor)**: The total Hours Studied.
+- **e (Noise)**: Individual Variations can include factors like quality of sleep, teacher effectiveness, or natural aptitude for the subject.
+
+
+**3. Engineering**
+In civil engineering, let's predict the strength of a concrete mix based on the amount of a specific additive used.
+
+- **Formula**: Concrete Strength = Baseline Strength + (Strength Increase per Unit of Additive * Amount of Additive) + Environmental Factors
+- **y (Outcome)**: The final Concrete Strength after it has cured.
+- **b (Intercept)**: Baseline Strength is the inherent strength of the concrete mix without any of the additive.
+- **w (Slope)**: Strength Increase per Unit of Additive is how much stronger the concrete gets for each kilogram of the additive used.
+- **x (Predictor)**: The Amount of Additive in the mix.
+- **e (Noise)**: Environmental Factors could be variations in temperature, humidity during curing, or slight inconsistencies in the raw materials.
+
+:::
+
 
 ### Generate the data
 
@@ -75,7 +113,7 @@ y = true_b + true_w * x + epsilon
 idx = np.arange(N)
 np.random.shuffle(idx)
 
-# uses first 75 random indices for training
+# uses first 80 random indices for training
 train_idx = idx[:int(0.8 * N)]
 validation_idx = idx[int(.8 * N):]
 
@@ -151,5 +189,31 @@ print(loss)
 
 ```
 
+### Compute the gradients
 
-### 
+In deep learning, a gradient tells us how much a change in one parameter like a weight or bias in a  neural networks will affect the output or loss. How much the loss changes if one parameter changes a little bit.
+
+Gradient is a partial derivative. Why?
+
+Imagine you have a recipe for a cake, and it has several ingredients such as flour, sugar, eggs, etc.
+Now, suppose you want to know how changing just the amount of  sugar affects the taste of the cake. You keep everything else the same and only vary the sugar. That's like taking a partial derivative, you are looking at the effect of one variable at a time, not all of them together.
+
+#### Gradient of the Intercept (`b`)
+
+- The gradient for the intercept `b` tells us how a small change in `b` affects the overall loss.
+
+- The gradient for the weight `w` is similar, but with one cricial difference. It's also influenced by the input value `x`. The weight `w` is the slope. its effect on the prediction is directly proportional to the input `x`. A change in `w` will have a much larger impact on the prediction when `x` is 100 than when `x` is 1. Therefore, data points with large `x` values should have a proportionally larger say in how we adjust `w`. Multiplying the error by `x_train` ensures that the adjustment to `w` is proportional to the input that produced the error.
+
+> 2* The 2 comes from the derivative of the squared error term(from the mean squared error formula). When you use calculus to find the rate of change, the exponent 2 comes down as a multiplier.
+
+```{python}
+# step3 computes gradients for both b and w parameters
+b_grad = 2 * error.mean()
+w_grad = 2 * (x_train * error).mean()
+print(b_grad, w_grad)
+```
+
+
+
+
+

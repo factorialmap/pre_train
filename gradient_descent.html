@@ -131,7 +131,7 @@ window.Quarto = {
 <p>Gradient descent is an iterative technique commonly used in machine learning to find the best possible set of parameters(coef) for a given model, data points, and loss function starting from an initial, and usually random, guess.</p>
 <p>To better understand the concept of gradient descent we will visualize the effects of different settings, telling the story to illustrate the concept to developing intuition.</p>
 <p>Loading packages or libraries.</p>
-<div id="569d81ba" class="cell" data-execution_count="1">
+<div id="beac105e" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
@@ -139,23 +139,67 @@ window.Quarto = {
 </div>
 <section id="define-the-model" class="level3">
 <h3 class="anchored" data-anchor-id="define-the-model">Define the model</h3>
-<p>In this model, we use a feature(x), and try to predict the value of a label(y) where:</p>
+<p>In this model, we use a feature or predictor(x), and try to predict the value of a label or outcome(y) where:</p>
 <ul>
 <li><p><strong>parameter b</strong>, the bias or intercept(<em>expected average value of y when x is zero</em>)</p></li>
 <li><p><strong>parameter w</strong>, the weight or slope(<em>how much y increases, on average, if we increase x by one unit</em>)</p></li>
-<li><p><strong>epsilon</strong>, the noise or error term.</p></li>
+<li><p><strong>epsilon</strong>, the noise or error term. Everything that affects the result but is not explained by the model. This could be random variation, external factors, measurement error, or any influence not explicitly included. <em>We can replace the “noise” with more intuitive expressions, such as “unpredictable variations”, “External influences”,“factors not considered”,” difference between expected and actual”, “errors or natural fluctuations”</em>.</p></li>
 </ul>
 <p><span class="math display">\[
 y = b + wx + \epsilon
 \]</span></p>
-<p>The same model in a less abstract way</p>
+<p>The same model in a less abstract way:</p>
+<p><strong>General:</strong> &gt; <code>Predicted Value = Baseline Value + (Effect of Predictor * Predictor Value) + Unexplained Variations</code></p>
+<p><strong>Human Resources:</strong> &gt; <code>Salary = Minimum Wage + (Increase per Year * Years of Experience) + Natural Fluctuations</code></p>
+<p><strong>Retail:</strong> &gt; <code>Total Sales = Baseline Sales + (Average Spend per Customer * Number of Customers) + Other Influences</code></p>
+<p><strong>Education:</strong> &gt; <code>Final Exam Score = Baseline Score + (Points per Study Hour * Hours Studied) + Individual Variations</code></p>
+<p><strong>Engineering:</strong> &gt; <code>Concrete Strength = Baseline Strength + (Strength Increase per Unit of Additive * Amount of Additive) + Environmental Factors</code>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Click here for more details of that model
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1. Retail</strong> Let’s imagine we want to predict the total sales for a day based on the number of customers that walk into a store.</p>
+<ul>
+<li><strong>Formula</strong>: Total Sales = Baseline Sales + (Average Spend per Customer * Number of Customers) + Other Influences</li>
+<li><strong>y (Outcome)</strong>: Total Sales for the day.</li>
+<li><strong>b(Intercept)</strong>: Baseline Sales represents the expected sales from online orders or other sources, even if zero customers walk in.</li>
+<li><strong>w (Slope)</strong>: Average Spend per Customer is the average amount each customer spends.</li>
+<li><strong>x (Predictor)</strong>: Number of Customers who visited the store.</li>
+<li><strong>e (Noise)</strong>: Other Influences could be things like a local event, bad weather, or a competitor’s sale.</li>
+</ul>
+<p><strong>2. Education</strong> Here, we’ll try to predict a student’s final exam score based on the hours they spent studying.</p>
+<ul>
+<li><strong>Formula</strong>: Final Exam Score = Baseline Score + (Points per Study Hour * Hours Studied) + Individual Variations</li>
+<li><strong>y (Outcome)</strong>: The Final Exam Score.</li>
+<li><strong>b (Intercept)</strong>: Baseline Score is the score a student might get with zero hours of studying, based on their prior knowledge.</li>
+<li><strong>w (Slope)</strong>: Points per Study Hour is the average increase in the exam score for each additional hour of study.</li>
+<li><strong>x (Predictor)</strong>: The total Hours Studied.</li>
+<li><strong>e (Noise)</strong>: Individual Variations can include factors like quality of sleep, teacher effectiveness, or natural aptitude for the subject.</li>
+</ul>
+<p><strong>3. Engineering</strong> In civil engineering, let’s predict the strength of a concrete mix based on the amount of a specific additive used.</p>
+<ul>
+<li><strong>Formula</strong>: Concrete Strength = Baseline Strength + (Strength Increase per Unit of Additive * Amount of Additive) + Environmental Factors</li>
+<li><strong>y (Outcome)</strong>: The final Concrete Strength after it has cured.</li>
+<li><strong>b (Intercept)</strong>: Baseline Strength is the inherent strength of the concrete mix without any of the additive.</li>
+<li><strong>w (Slope)</strong>: Strength Increase per Unit of Additive is how much stronger the concrete gets for each kilogram of the additive used.</li>
+<li><strong>x (Predictor)</strong>: The Amount of Additive in the mix.</li>
+<li><strong>e (Noise)</strong>: Environmental Factors could be variations in temperature, humidity during curing, or slight inconsistencies in the raw materials.</li>
+</ul>
+</div>
+</div>
+</div>
 </section>
-</section>
-<section id="salary-minimum_wage-increase_per_year-years_experience-noise" class="level2">
-<h2 class="anchored" data-anchor-id="salary-minimum_wage-increase_per_year-years_experience-noise">&gt; salary = minimum_wage + increase_per_year * years_experience + noise</h2>
 <section id="generate-the-data" class="level3">
 <h3 class="anchored" data-anchor-id="generate-the-data">Generate the data</h3>
-<div id="4486b2c9" class="cell" data-execution_count="2">
+<div id="d022194f" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>true_b <span class="op">=</span> <span class="dv">1</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>true_w <span class="op">=</span> <span class="dv">2</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">100</span></span>
@@ -169,14 +213,14 @@ y = b + wx + \epsilon
 </section>
 <section id="separete-dataset-in-training-validation-and-test" class="level3">
 <h3 class="anchored" data-anchor-id="separete-dataset-in-training-validation-and-test">Separete dataset in training, validation and test</h3>
-<div id="d65de45d" class="cell" data-execution_count="3">
+<div id="61b0bcf6" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># shuffles the indices</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>idx <span class="op">=</span> np.arange(N)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>np.random.shuffle(idx)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># uses first 75 random indices for training</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>train_idx <span class="op">=</span> idx[:<span class="bu">int</span>(<span class="fl">0.75</span> <span class="op">*</span> N)]</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>validation_idx <span class="op">=</span> idx[<span class="bu">int</span>(<span class="fl">.75</span> <span class="op">*</span> N):]</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># uses first 80 random indices for training</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>train_idx <span class="op">=</span> idx[:<span class="bu">int</span>(<span class="fl">0.8</span> <span class="op">*</span> N)]</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>validation_idx <span class="op">=</span> idx[<span class="bu">int</span>(<span class="fl">.8</span> <span class="op">*</span> N):]</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Generates train and valiation sets</span></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>x_train, y_train <span class="op">=</span> x[train_idx], y[train_idx]</span>
@@ -185,7 +229,7 @@ y = b + wx + \epsilon
 </section>
 <section id="visualize-the-data-for-training-and-validation" class="level3">
 <h3 class="anchored" data-anchor-id="visualize-the-data-for-training-and-validation">Visualize the data for training and validation</h3>
-<div id="49aff3fc" class="cell" data-execution_count="4">
+<div id="5706b0ea" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>plt.clf</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>, figsize <span class="op">=</span>(<span class="fl">7.5</span>,<span class="dv">4</span>))</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].scatter(x_train, y_train, color <span class="op">=</span><span class="st">'blue'</span>, label<span class="op">=</span>  <span class="st">"Traininig data"</span>)</span>
@@ -203,7 +247,7 @@ y = b + wx + \epsilon
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="gradient_descent_files/figure-html/cell-5-output-1.png" width="728" height="415" class="figure-img"></p>
+<p><img src="gradient_descent_files/figure-html/cell-5-output-1.png" width="724" height="409" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -211,7 +255,7 @@ y = b + wx + \epsilon
 </section>
 <section id="for-training-the-model-we-need-to-randomly-initialize-the-parametersweights." class="level3">
 <h3 class="anchored" data-anchor-id="for-training-the-model-we-need-to-randomly-initialize-the-parametersweights.">For training the model, we need to randomly initialize the parameters/weights.</h3>
-<div id="0fe0a03a" class="cell" data-execution_count="5">
+<div id="ae2cdaf6" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> np.random.randn(<span class="dv">1</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> np.random.randn(<span class="dv">1</span>)</span>
@@ -224,13 +268,13 @@ y = b + wx + \epsilon
 </section>
 <section id="basic-parameter-values-and-predictions" class="level3">
 <h3 class="anchored" data-anchor-id="basic-parameter-values-and-predictions">Basic parameter values and predictions</h3>
-<div id="c808b46e" class="cell" data-execution_count="6">
+<div id="81a1b43f" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>yhat <span class="op">=</span> b <span class="op">+</span> w <span class="op">*</span> x_train</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="visualize-the-predictions" class="level3">
 <h3 class="anchored" data-anchor-id="visualize-the-predictions">Visualize the predictions</h3>
-<div id="190f0142" class="cell" data-execution_count="7">
+<div id="054c6a17" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>plt.clf()</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>plt.style.use(<span class="st">'fivethirtyeight'</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(x_train, y_train, label <span class="op">=</span> <span class="st">"Training data"</span>)</span>
@@ -242,7 +286,7 @@ y = b + wx + \epsilon
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="gradient_descent_files/figure-html/cell-8-output-1.png" width="670" height="492" class="figure-img"></p>
+<p><img src="gradient_descent_files/figure-html/cell-8-output-1.png" width="665" height="487" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -252,15 +296,42 @@ y = b + wx + \epsilon
 <h3 class="anchored" data-anchor-id="compute-the-loss">Compute the Loss</h3>
 <p>The loss is some sort of aggregation of the difference between the predictions and the actual values. Aggregation of errors for a set of data points.</p>
 <p>For a regression problem the loss is given by the mean squared error (MSE).</p>
-<div id="593fa9b6" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>error <span class="op">=</span> (yhat <span class="op">-</span> y_train)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>loss <span class="op">=</span> (error <span class="op">**</span> <span class="dv">2</span>).mean()</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(loss)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="a3f0f455" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># all data points or batch gradient descent</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>error <span class="op">=</span> (yhat <span class="op">-</span> y_train)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># MSE loss</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>loss <span class="op">=</span> (error <span class="op">**</span> <span class="dv">2</span>).mean()</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(loss)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>2.7044901487908586</code></pre>
+<pre><code>2.7421577700550976</code></pre>
 </div>
 </div>
+</section>
+<section id="compute-the-gradients" class="level3">
+<h3 class="anchored" data-anchor-id="compute-the-gradients">Compute the gradients</h3>
+<p>In deep learning, a gradient tells us how much a change in one parameter like a weight or bias in a neural networks will affect the output or loss. How much the loss changes if one parameter changes a little bit.</p>
+<p>Gradient is a partial derivative. Why?</p>
+<p>Imagine you have a recipe for a cake, and it has several ingredients such as flour, sugar, eggs, etc. Now, suppose you want to know how changing just the amount of sugar affects the taste of the cake. You keep everything else the same and only vary the sugar. That’s like taking a partial derivative, you are looking at the effect of one variable at a time, not all of them together.</p>
+<section id="gradient-of-the-intercept-b" class="level4">
+<h4 class="anchored" data-anchor-id="gradient-of-the-intercept-b">Gradient of the Intercept (<code>b</code>)</h4>
+<ul>
+<li><p>The gradient for the intercept <code>b</code> tells us how a small change in <code>b</code> affects the overall loss.</p></li>
+<li><p>The gradient for the weight <code>w</code> is similar, but with one cricial difference. It’s also influenced by the input value <code>x</code>. The weight <code>w</code> is the slope. its effect on the prediction is directly proportional to the input <code>x</code>. A change in <code>w</code> will have a much larger impact on the prediction when <code>x</code> is 100 than when <code>x</code> is 1. Therefore, data points with large <code>x</code> values should have a proportionally larger say in how we adjust <code>w</code>. Multiplying the error by <code>x_train</code> ensures that the adjustment to <code>w</code> is proportional to the input that produced the error.</p></li>
+</ul>
+<blockquote class="blockquote">
+<p>2* The 2 comes from the derivative of the squared error term(from the mean squared error formula). When you use calculus to find the rate of change, the exponent 2 comes down as a multiplier.</p>
+</blockquote>
+<div id="825adf8d" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># step3 computes gradients for both b and w parameters</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>b_grad <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> error.mean()</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>w_grad <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (x_train <span class="op">*</span> error).mean()</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(b_grad, w_grad)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>-3.044811379650508 -1.8337537171510832</code></pre>
+</div>
+</div>
+</section>
 </section>
 </section>
 
