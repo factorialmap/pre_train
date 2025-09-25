@@ -21,21 +21,35 @@ import matplotlib.pyplot as plt
 
 ### Define the model
 
-In this model, we use a feature(x), and try to predict the value of a label(y) where:
+In this model, we use a feature or predictor(x), and try to predict the value of a label or outcome(y) where:
 
 -   **parameter b**, the bias or intercept(*expected average value of y when x is zero*)
 
 -   **parameter w**, the weight or slope(*how much y increases, on average, if we increase x by one unit*)
 
--   **epsilon**, the noise or error term.
+-   **epsilon**, the noise or error term. Everything that affects the result but is not explained by the model. This could be random variation, external factors, measurement error, or any influence not explicitly included. *We can replace the "noise" with more intuitive expressions, such as "unpredictable variations", "External influences","factors not considered"," difference between expected and actual", "errors or natural fluctuations"*.
+
 
 $$
 y = b + wx + \epsilon
 $$
 
-The same model in a less abstract way
+The same model in a less abstract way:
 
-## \> salary = minimum_wage + increase_per_year \* years_experience + noise
+**General:**
+> `Predicted Value = Baseline Value + (Effect of Predictor * Predictor Value) + Unexplained Variations`
+
+**Human Resources:**
+> `Salary = Minimum Wage + (Increase per Year * Years of Experience) + Natural Fluctuations`
+
+**Retail:**
+> `Total Sales = Baseline Sales + (Average Spend per Customer * Number of Customers) + Other Influences`
+
+**Education:**
+> `Final Exam Score = Baseline Score + (Points per Study Hour * Hours Studied) + Individual Variations`
+
+**Engineering:**
+> `Concrete Strength = Baseline Strength + (Strength Increase per Unit of Additive * Amount of Additive) + Environmental Factors`
 
 ### Generate the data
 
