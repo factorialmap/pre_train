@@ -4,6 +4,12 @@ subtitle: "Source: Book Deep Learning with Pytorch step-by-step by Danil Voigt G
 format: html
 ---
 
+## Gradient Descent
+
+Gradient descent is an iterative technique commonly used in machine learning to find the best possible set of parameters(coef) for a given model, data points, and loss function starting from an initial, and usually random, guess.
+
+To better understand the concept of gradient descent we will visualize the effects of different settings, telling the story to illustrate the concept to developing intuition.
+
 Loading packages or libraries.
 
 ```{python}
@@ -13,11 +19,7 @@ from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 ```
 
-Gradient descent is an iterative technique commonly used in machine learning to find the best possible set of parameters(coef) for a given model, data points, and loss function starting from an initial, and usually random, guess.
-
-To better understand the concept of gradient descent we will visualize the effects of different settings, telling the story to illustrate the concept to developing intuition.
-
-**Define the model**
+### Define the model
 
 In this model, we use a feature(x), and try to predict the value of a label(y) where:
 
@@ -33,7 +35,9 @@ $$
 
 The same model in a less abstract way
 
-> salary = minimum_wage + increase_per_year \* years_experience + noise
+## \> salary = minimum_wage + increase_per_year \* years_experience + noise
+
+### Generate the data
 
 ```{python}
 
@@ -49,7 +53,7 @@ y = true_b + true_w * x + epsilon
 
 ```
 
-Separete dataset in training, validation and test
+### Separete dataset in training, validation and test
 
 ```{python}
 
@@ -58,22 +62,21 @@ idx = np.arange(N)
 np.random.shuffle(idx)
 
 # uses first 75 random indices for training
-train_idx = idx[:int(0.75 * N)]
-validation_idx = idx[int(.75 * N):]
+train_idx = idx[:int(0.8 * N)]
+validation_idx = idx[int(.8 * N):]
 
 # Generates train and valiation sets
 x_train, y_train = x[train_idx], y[train_idx]
 x_validation, y_validation = x[validation_idx], y[validation_idx]
 ```
 
-Visualize the data for training and validation
-
+### Visualize the data for training and validation
 
 ```{python}
 plt.clf
-fig, axs = plt.subplots(1,2, figsize =(10,5))
+fig, axs = plt.subplots(1,2, figsize =(7.5,4))
 axs[0].scatter(x_train, y_train, color ='blue', label=  "Traininig data")
-plt.style.use('seaborn-v0_8-talk')
+plt.style.use('fivethirtyeight')
 axs[0].set_title("Training data")
 axs[0].set_xlabel("x")
 axs[0].set_ylabel("y")
@@ -86,7 +89,7 @@ axs[1].set_ylabel("y")
 axs[1].legend()
 ```
 
-For training the model, we need to randomly initialize the parameters/weights.
+### For training the model, we need to randomly initialize the parameters/weights.
 
 ```{python}
 np.random.seed(42)
@@ -97,20 +100,42 @@ print(b,w)
 
 ```
 
-Basic parameter values and predictions
+### Basic parameter values and predictions
 
 ```{python}
 yhat = b + w * x_train
+
 ```
 
-Visualize the predictions
+### Visualize the predictions
 
 ```{python}
 plt.clf()
 plt.style.use('fivethirtyeight')
 plt.scatter(x_train, y_train, label = "Training data")
-plt.plot(x_train, yhat, color = "red", linestyle = "dashed", label = f'Initial Model:  y = {b[0]:.2f} + {w[0]:.2f}x')
+plt.plot(x_train, yhat, color = "red", linestyle = "dashed", label = f'Initial Model:  b= {b[0]:3f} w= {w[0]:.3f}x')
 plt.xlabel("x")
 plt.ylabel("y")
+plt.title("Model predictions with random parameters")
 plt.legend()
 ```
+
+### Compute the Loss
+
+The loss is some sort of aggregation of the difference between the predictions and the actual values. Aggregation of errors for a set of data points.
+
+For a regression problem the loss is given by the mean squared error (MSE).
+
+```{python}
+
+# all data points or batch gradient descent
+error = (yhat - y_train)
+
+# MSE loss
+loss = (error ** 2).mean()
+print(loss)
+
+```
+
+
+### 
